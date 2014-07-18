@@ -5,7 +5,7 @@ describe('Service: BookDataService', function() {
   var BookDataService;
 
   // load the application module
-  beforeEach(  module('bmApp'));
+  beforeEach(module("bmApp"));
 
   // get a reference to the service
   beforeEach(inject(function (_BookDataService_) {
