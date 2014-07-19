@@ -49,13 +49,25 @@ bmApp.factory('BookDataService', function() {
       }
     }
     return null;
-  }
+  };
 
   srv.getBooks = function() {
     // Copy the array in order not to expose
     // the internal data structure
     return angular.copy(srv._books);
-  }
+  };
+
+  srv.storeBook = function(book) {
+    srv._books.push(book);
+  };
+
+  srv.updateBook = function(book) {
+    
+  };
+
+  srv.deleteBookByIsbn = function(isbn) {
+
+  };
 
   // Public API
   return {
@@ -64,6 +76,15 @@ bmApp.factory('BookDataService', function() {
     },
     getBooks: function() {
       return srv.getBooks();
+    },
+    storeBook: function(book) {
+      return srv.storeBook(book);
+    },
+    updateBook: function(book) {
+      return srv.updateBook(book);
+    },
+    deletBookByIsbn: function(isbn) {
+      return srv.deletBookByIsbn(isbn);
     }
   };
 });
