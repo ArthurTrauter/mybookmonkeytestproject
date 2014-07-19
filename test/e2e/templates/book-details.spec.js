@@ -28,7 +28,7 @@ describe("E2E: book details view", function() {
       'http://dpunkt.de/'
     );
     expect(element('.bm-book-abstract').html()).toBe(
-      'JavaScript ist längst nicht mehr nur für klassische Web-Programmierer interessant'
+      'JavaScript ist längst nicht mehr nur für klassische Webprogrammierer interessant.'
     );
   });
 
