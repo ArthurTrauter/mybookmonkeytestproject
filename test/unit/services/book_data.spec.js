@@ -33,6 +33,9 @@ describe('Service: BookDataService', function() {
       expect(BookDataService.deleteBookByIsbn).toBeDefined();
     });
 
+    it('should include a getTags() function', function() {
+      expect(BookDataService.getTags).toBeDefined();
+    });
   });
 
   describe('Public API usage', function() {
@@ -100,6 +103,14 @@ describe('Service: BookDataService', function() {
       });
     });
 
+    describe('getTags()', function() {
+      it('should return a proper array of tags',
+      function() {
+        var tags = BookDataService.getTags();
+        expect(tags.length).toBe(8);
+      });
+    });
+
   });
 
   // Helper function
@@ -115,7 +126,10 @@ describe('Service: BookDataService', function() {
           publisher : {
             name : 'dpunkt.verlag',
             url  : 'http://dpunkt.de'
-          }
+          },
+          tags: [
+            'javascript', 'enterprise', 'nodejs', 'web', 'browser'
+          ]
         };
 
     BookDataService.storeBook(book);

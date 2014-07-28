@@ -13,7 +13,10 @@ bmApp.factory('BookDataService', function() {
             publisher   : {
                 name: 'dpunkt.verlag',
                 url : 'http://dpunkt.de/'
-            }
+            },
+            tags: [
+              'javascript', 'enterprise', 'nodejs', 'web', 'browser'
+            ]
         },
         {
             title       : 'Node.js & Co.',
@@ -25,7 +28,10 @@ bmApp.factory('BookDataService', function() {
             publisher   : {
                 name: 'dpunkt.verlag',
                 url : 'http://dpunkt.de/'
-            }
+            },
+            tags: [
+              'javascript', 'nodejs', 'web', 'realtime', 'socketio'
+            ]
         },
         {
             title       : 'CoffeeScript',
@@ -37,7 +43,10 @@ bmApp.factory('BookDataService', function() {
             publisher   : {
                 name: 'dpunkt.verlag',
                 url : 'http://dpunkt.de/'
-            }
+            },
+            tags: [
+              'coffeescript', 'web'
+            ]
         }
     ];
 
@@ -62,11 +71,37 @@ bmApp.factory('BookDataService', function() {
   };
 
   srv.updateBook = function(book) {
-    
+    for (var i = 0, n = srv._books.length; i < n; i++) {
+      if (book.isbn === srv._books[i].isbn) {
+        angular.extend(srv._books[i], book);
+        return;
+      };
+    };
   };
 
   srv.deleteBookByIsbn = function(isbn) {
+    var i = srv._books.length;
+    while (i--) {
+      if (isbn === srv._books[i].isbn) {
+        srv._books.splice(i, 1);
+        return;
+      };
+    };
+  };
 
+  srv.getTags = function() {
+    var obj = {},
+        tag;
+
+    for (var i = 0, n = srv._books.length; i < n; i++) {
+      for (var j = 0, m = srv._books[i].tags.length; j < m; j++) {
+        tag = srv._books[i].tags[j];
+        if (!obj.hasOwnProperty(tag)) {
+          obj[tag] = true;
+        }
+      }
+    }
+    return Object.keys(obj);
   };
 
   // Public API
@@ -83,8 +118,11 @@ bmApp.factory('BookDataService', function() {
     updateBook: function(book) {
       return srv.updateBook(book);
     },
-    deletBookByIsbn: function(isbn) {
-      return srv.deletBookByIsbn(isbn);
+    deleteBookByIsbn: function(isbn) {
+      return srv.deleteBookByIsbn(isbn);
+    },
+    getTags: function() {
+      return srv.getTags();
     }
   };
 });
