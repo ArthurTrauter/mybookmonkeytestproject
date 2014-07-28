@@ -3,21 +3,21 @@ describe('E2E: book list view', function() {
   // Define the array of books in the expected order
   // Sorted by title
   var expectedBooks = [
-    {
-      title: 'CoffeeScript',
-      isbn: '978-3-86490-050-1',
-      author: 'Andreas Schubert'
-    },
-    {
-      title: 'JavaScript für Enterprise-Entwickler',
-      isbn: '978-3-89864-728-1',
-      author: 'Oliver Ochs'
-    },
-    {
-      title: 'Node.js & Co.',
-      isbn: '978-3-89864-829-5',
-      author: 'Golo Roden'
-    }
+  {
+    title: 'CoffeeScript',
+    isbn: '978-3-86490-050-1',
+    author: 'Andreas Schubert'
+  },
+  {
+    title: 'JavaScript für Enterprise-Entwickler',
+    isbn: '978-3-89864-728-1',
+    author: 'Oliver Ochs'
+  },
+  {
+    title: 'Node.js & Co.',
+    isbn: '978-3-89864-829-5',
+    author: 'Golo Roden'
+  }
   ];
 
   // Derive an array that only contains titles
@@ -34,13 +34,15 @@ describe('E2E: book list view', function() {
   var selector = 'table.bm-book-list tr';
 
   it('should show the correct number of books', function() {
-    expect(repeater(selector).count()).toEqual(expectedBooks.length);
+    expect(repeater(selector).count()).
+      toEqual(expectedBooks.length);
   });
 
   it('should show the books in the proper order', function() {
     // Are they in the expeted order
     // (ascneding sorted by title?)
-    expect(repeater(selector).column('book.title')).toEqual(orderedTitles);
+    expect(repeater(selector).column('book.title')).
+      toEqual(orderedTitles);
   });
 
   it('should show the correct book information', function() {
@@ -48,9 +50,9 @@ describe('E2E: book list view', function() {
     for (var i = 0, n = expectedBooks.length; i < n; i++) {
       expect(repeater(selector).row(i)).toEqual(
         [
-          expectedBooks[i].title,
-          expectedBooks[i].author,
-          expectedBooks[i].isbn
+        expectedBooks[i].title,
+        expectedBooks[i].author,
+        expectedBooks[i].isbn
         ]
       );
     }
@@ -60,27 +62,75 @@ describe('E2E: book list view', function() {
     // Coffee
     var searchText = orderedTitles[0].substr(0, 6);
     input('searchText').enter(searchText);
-    expect(repeater(selector).column('book.title')).toEqual([orderedTitles[0]]);
+    expect(repeater(selector).column('book.title')).
+      toEqual([orderedTitles[0]]);
   });
 
   it('should allow filtering by author', function() {
     // Andreas
     var searchText = expectedBooks[0].author.substr(0, 7);
     input('searchText').enter(searchText);
-    expect(repeater(selector).column('book.title')).toEqual([orderedTitles[0]]);
+    expect(repeater(selector).column('book.title')).
+      toEqual([orderedTitles[0]]);
   });
 
   it('should allow filtering by isbn', function() {
     // 050-1
     var searchText = expectedBooks[0].isbn.substr(-5, 5);
     input('searchText').enter(searchText);
-    expect(repeater(selector).column('book.title')).toEqual([orderedTitles[0]]);
+    expect(repeater(selector).column('book.title')).
+      toEqual([orderedTitles[0]]);
   });
 
   it('should appropriately navigate to details view', function() {
     var i = 0,
-    detailsLink = selector + ':nth-child('+ (i+1) +') a';
+    detailsLink = selector + ':nth-child('+ (i+1) +') a.bm-details-link';
     element(detailsLink).click();
-    expect(browser().location().path()).toEqual('/books/' + expectedBooks[i].isbn);
+    expect(browser().location().path()).
+      toEqual('/books/' + expectedBooks[i].isbn);
   });
+
+  describe('E2E: admin book list view', function() {
+
+    beforeEach(function() {
+      browser().navigateTo('#/admin/books');
+      browser().reload();
+    });
+
+    it('should appropriately navigate to admin view', function() {
+      expect(browser().location().path()).
+        toEqual('/admin/books');
+    });
+
+    it('should appropriately navigate to admin edit view', function() {
+      // click auf den edit link
+      var i = 0,
+      detailsLink = selector + ':nth-child('+ (i+1) +') a';
+      element(detailsLink).click();
+
+      expect(browser().location().path()).
+        toEqual('/admin/books/' + expectedBooks[i].isbn + '/edit');
+    });
+
+    it('should appropriately navigate to admin delete view', function() {
+      // click auf den delete link
+      var i = 0,
+      detailsLink = selector + ':nth-child('+ (i+1) +') a';
+      element(detailsLink).click();
+
+      expect(browser().location().path()).
+        toEqual('/admin/books/' + expectedBooks[i].isbn + '/delete');
+    });
+
+    it('should appropriately navigate to admin new view', function() {
+      // click auf den new link
+      var detailsLink = 'bm-new-book-link a';
+      element(detailsLink).click();
+
+      expect(browser().location().path()).
+      toEqual('/admin/books/' + expectedBooks[0].isbn + '/new');
+    });
+
+  });
+
 });
